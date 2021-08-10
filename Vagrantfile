@@ -1,4 +1,4 @@
-BOX_IMAGE = "kuberverse/ubuntu-16.04"
+BOX_IMAGE = "ubuntu/bionic64"
 
 MASTER_COUNT = 1
 WORKER_COUNT = 2
