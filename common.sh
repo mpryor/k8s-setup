@@ -37,7 +37,7 @@ then
   ### Refresh apt cache
   apt-get update
 
-  apt-get install -y nfs-kernel-server nfs-common avahi-daemon libnss-mdns traceroute htop httpie bash-completion ruby docker-ce=5:18.09.1~3-0~ubuntu-$UBUNTU_CODENAME kubeadm kubelet kubectl
+  apt-get install -y nfs-kernel-server nfs-common avahi-daemon libnss-mdns traceroute htop httpie bash-completion ruby docker-ce=5:19.03.13~3-0~ubuntu-$UBUNTU_CODENAME kubeadm kubelet kubectl
 
 fi
 
