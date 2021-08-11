@@ -1,4 +1,3 @@
-X_
 #!/usr/bin/env bash
 # kuberverse kubernetes cluster lab
 # version: 0.1.0-alpha-a
@@ -8,8 +7,6 @@ X_
 #variable definitions
 KVMSG=$1
 BOX_IMAGE=$2
-#NODE_ADDRESS=$2
-#MASTER_TYPE=$3
 
 if [[ ! $BOX_IMAGE =~ "kuberverse" ]]
 then
