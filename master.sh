@@ -25,3 +25,10 @@ kubectl apply -f /tmp/calico-defined.yaml
 echo KUBELET_EXTRA_ARGS=--node-ip=$MASTER_IP  > /etc/default/kubelet
 systemctl restart networking
 systemctl restart kubelet
+
+git clone https://github.com/mpryor/k8s-setup
+cd k8s-setup
+git checkout feature/refactor
+cd cluster
+chmod +x cluster-setup.sh
+./cluster-setup.sh
