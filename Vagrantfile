@@ -1,6 +1,5 @@
 BOX_IMAGE = "ubuntu/bionic64"
 
-MASTER_COUNT = 1
 WORKER_COUNT = 2
 
 MASTER_MEMORY = 1024
@@ -22,50 +21,47 @@ class KvLab
   end
 
   def createMaster(config)
+		config.vm.define "kube-master" do |master|
+			master.vm.box = BOX_IMAGE
+			master.vm.hostname = "kube-master"
+			master.vm.network :public_network
 
-    (0..MASTER_COUNT-1).each do |i|
-      config.vm.define "kv-master-#{i}" do |master|
-        master.vm.box = BOX_IMAGE
-        master.vm.hostname = "kv-master-#{i}"
-        master.vm.network :public_network
+			$script = ""
 
-        $script = ""
+			master.vm.provider :virtualbox do |vb|
+				vb.customize ["modifyvm", :id, "--cpus", 2]
+				vb.memory = MASTER_MEMORY
+			end
 
-        master.vm.provider :virtualbox do |vb|
-          vb.customize ["modifyvm", :id, "--cpus", 2]
-          vb.memory = MASTER_MEMORY
-        end
+			if !BOX_IMAGE.include? "kuberverse"
+				master.vm.provider "vmware_desktop" do |v|
+					v.vmx["memsize"] = MASTER_MEMORY
+					v.vmx["numvcpus"] = "2"
+				end
+			end
 
-        if !BOX_IMAGE.include? "kuberverse"
-          master.vm.provider "vmware_desktop" do |v|
-            v.vmx["memsize"] = MASTER_MEMORY
-            v.vmx["numvcpus"] = "2"
-          end
-        end
+			$script = $script + <<-SCRIPT
 
-        $script = $script + <<-SCRIPT
+				mkdir -p /home/vagrant/.kv
 
-          mkdir -p /home/vagrant/.kv
+				wget -q #{COMMON_SCRIPT_URL} -O /home/vagrant/.kv/common.sh
+				chmod +x /home/vagrant/.kv/common.sh
+				/home/vagrant/.kv/common.sh
 
-          wget -q #{COMMON_SCRIPT_URL} -O /home/vagrant/.kv/common.sh
-          chmod +x /home/vagrant/.kv/common.sh
-          /home/vagrant/.kv/common.sh
-
-          wget -q #{MASTER_SCRIPT_URL} -O /home/vagrant/.kv/master.sh
-          chmod +x /home/vagrant/.kv/master.sh
-          IP=$(/sbin/ifconfig eth1 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
-          /home/vagrant/.kv/master.sh #{POD_CIDR} $IP
-        SCRIPT
-        master.vm.provision "shell", inline: $script
-      end
+				wget -q #{MASTER_SCRIPT_URL} -O /home/vagrant/.kv/master.sh
+				chmod +x /home/vagrant/.kv/master.sh
+				IP=$(ifconfig enp0s8 | grep "inet " | awk '{print $2}')
+				/home/vagrant/.kv/master.sh #{POD_CIDR} $IP
+			SCRIPT
+			master.vm.provision "shell", inline: $script
     end
   end
 
   def createWorker(config)
     (0..WORKER_COUNT-1).each do |i|
-      config.vm.define "kv-worker-#{i}" do |worker|
+      config.vm.define "kube-worker-#{i}" do |worker|
         worker.vm.box = BOX_IMAGE
-        worker.vm.hostname = "kv-worker-#{i}"
+        worker.vm.hostname = "kube-worker-#{i}"
         worker.vm.network :public_network
         worker.vm.provider :virtualbox do |vb|
           vb.customize ["modifyvm", :id, "--cpus", 2, "--natdnshostresolver1", "on"]
@@ -88,7 +84,7 @@ class KvLab
 
           wget -q #{WORKER_SCRIPT_URL} -O /home/vagrant/.kv/worker.sh
           chmod +x /home/vagrant/.kv/worker.sh
-          IP=$(/sbin/ifconfig eth1 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
+					IP=$(ifconfig enp0s8 | grep "inet " | awk '{print $2}')
           /home/vagrant/.kv/worker.sh $IP 
         SCRIPT
         worker.vm.provision "shell", inline: $script
