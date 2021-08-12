@@ -8,7 +8,7 @@ WORKER_MEMORY = 1024
 
 POD_CIDR = "172.18.0.0/16"
 
-KVMSG = "Kuberverse Kubernetes Cluster Lab"
+KVMSG = "Matt's K8s lab"
 
 COMMON_SCRIPT_URL = "https://raw.githubusercontent.com/mpryor/k8s-setup/master/common.sh"
 MASTER_SCRIPT_URL = "https://raw.githubusercontent.com/mpryor/k8s-setup/master/master.sh"
@@ -49,12 +49,12 @@ class KvLab
 
           wget -q #{COMMON_SCRIPT_URL} -O /home/vagrant/.kv/common.sh
           chmod +x /home/vagrant/.kv/common.sh
-          /home/vagrant/.kv/common.sh "#{KVMSG}" #{BOX_IMAGE}
+          /home/vagrant/.kv/common.sh
 
           wget -q #{MASTER_SCRIPT_URL} -O /home/vagrant/.kv/master.sh
           chmod +x /home/vagrant/.kv/master.sh
           IP=$(/sbin/ifconfig eth1 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
-          /home/vagrant/.kv/master.sh "#{KVMSG}" #{i} #{POD_CIDR} $IP #{MASTER_COUNT == 1 ? "single" : "multi"}
+          /home/vagrant/.kv/master.sh #{POD_CIDR} $IP
         SCRIPT
         master.vm.provision "shell", inline: $script
       end
@@ -84,12 +84,12 @@ class KvLab
 
           wget -q #{COMMON_SCRIPT_URL} -O /home/vagrant/.kv/common.sh
           chmod +x /home/vagrant/.kv/common.sh
-          /home/vagrant/.kv/common.sh "#{KVMSG}" #{BOX_IMAGE}
+          /home/vagrant/.kv/common.sh
 
           wget -q #{WORKER_SCRIPT_URL} -O /home/vagrant/.kv/worker.sh
           chmod +x /home/vagrant/.kv/worker.sh
           IP=$(/sbin/ifconfig eth1 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
-          /home/vagrant/.kv/worker.sh "#{KVMSG}" #{i} $IP #{MASTER_COUNT == 1 ? "single" : "multi"}
+          /home/vagrant/.kv/worker.sh $IP 
         SCRIPT
         worker.vm.provision "shell", inline: $script
       end

@@ -1,14 +1,5 @@
-#!/usr/bin/env bash
-# kuberverse kubernetes cluster lab
-# version: 0.1.0-alpha
-# description: this is the masters script file
-# created by Artur Scheiner - artur.scheiner@gmail.com
-
-KVMSG=$1
-NODE=$2
-POD_CIDR=$3
-MASTER_IP=$4
-MASTER_TYPE=$5
+POD_CIDR=$1
+MASTER_IP=$2
 
 wget -q https://docs.projectcalico.org/manifests/calico.yaml -O /tmp/calico-default.yaml
 sed "s+192.168.0.0/16+$POD_CIDR+g" /tmp/calico-default.yaml > /tmp/calico-defined.yaml
