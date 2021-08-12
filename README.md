@@ -6,7 +6,7 @@ This repo contains my current Kubernetes lab environment. I do not recommend usi
 
 ## Requirements
 
-Virtualbox
+Virtualbox  
 Vagrant
 
 ## Installation (via powershell) on Windows:
