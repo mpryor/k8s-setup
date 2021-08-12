@@ -22,7 +22,7 @@ At this point you should have a cluster up and running.
 
 Get into the control plane node by running `vagrant ssh kube-master`
 
-Validate the environment is health by running a few kubectl commands:
+Validate the environment is healthy by running a few kubectl commands:
 
 ```
 kubectl get nodes -o wide
