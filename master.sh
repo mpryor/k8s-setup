@@ -29,5 +29,5 @@ systemctl restart kubelet
 git clone https://github.com/mpryor/k8s-setup
 cd k8s-setup
 cd cluster
-chmod +x cluster-setup.sh
-./cluster-setup.sh
+chmod +x setup-cluster.sh
+./setup-cluster.sh
