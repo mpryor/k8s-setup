@@ -40,3 +40,7 @@ An easy trick to grab the kubectl configuration from the control plane node is t
 3. Open a socket to send the file over `cat ~/.kube/config | nc -l 1234`
 4. NOTE: this will overwrite any pre-existing k8s config you have... From the machine you'd like to be able to run kubectl on, run this: `nc -v $CONTROL_PLANE_IP 1234 > ~/.kube/config` 
 
+## Post Installation steps (installing metallb, setting up a demo pod, setting up metrics-server)
+1. On the machine you intend on using as a client (where you have kubectl setup), clone this repo: `git clone https://github.com/mpryor/k8s-setup`
+2. Run the cluster install script `cd k8s-setup/cluster; ./setup-cluster.sh`
+
