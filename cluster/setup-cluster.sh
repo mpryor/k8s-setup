@@ -24,3 +24,8 @@ header "Installing k8s dashboard"
 cd k8s-dashboard
 ./install.sh
 cd ..
+
+header "Installing prometheus/alertmanager/gafana"
+cd kube-prometheus
+./install.sh
+cd ..
