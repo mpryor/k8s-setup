@@ -23,5 +23,5 @@ cp -i /etc/kubernetes/admin.conf /vagrant/.kube/config
 kubectl apply -f /tmp/calico-defined.yaml
 
 echo KUBELET_EXTRA_ARGS=--node-ip=$MASTER_IP  > /etc/default/kubelet
-systemctl restart networking
+systemctl restart systemd-networkd
 systemctl restart kubelet
